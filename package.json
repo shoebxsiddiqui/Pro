@@ -53,5 +53,6 @@
   },
   "devDependencies": {
     "tailwindcss": "^3.4.9"
-  }
+  },
+  "proxy": "https://profile-backend-bwxw.onrender.com"
 }

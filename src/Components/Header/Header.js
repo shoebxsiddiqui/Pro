@@ -1,5 +1,6 @@
 import React from "react";
 import { FaSearch } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 const Header = () => {
   const subURL =
@@ -37,7 +38,9 @@ const Header = () => {
       <div className="text-gray-50 font-bold font-sans mt-3.5">
         Become a Seller
       </div>
-      <div className="text-gray-50 font-bold font-sans mt-3.5">Cart</div>
+      <Link to="/cart" className="text-gray-50 font-bold font-sans mt-3.5">
+        Cart
+      </Link>
     </div>
   );
 };
