@@ -1,17 +1,36 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { getProducts } from "../../actions/productAction";
 
 const Categories = () => {
+  const dispatch = useDispatch();
+
+  const [brands, setBrands] = useState([]);
+
+  const brandOptions = [
+    "ZenithWare",
+    "NovaTrend",
+    "AeroFusion",
+    "PixelPeak",
+    "EchoLux",
+    "QuantumEdge",
+    "VortexVibe",
+    "StellarLine",
+    "LuxeFusion",
+    "NebulaNex",
+  ];
+
+  useEffect(() => {
+    dispatch(getProducts({ brands }));
+  }, [dispatch, brands]);
+
   return (
     <div className="h-10 bg-white flex justify-evenly items-center text-sm font-bold">
-      <div>Electronics </div>
-      <div>TVs & Appliances </div>
-      <div>Men</div>
-      <div>Women</div>
-      <div>Baby & Kids</div>
-      <div>Home & Furniture</div>
-      <div>Sports, Books & More</div>
-      <div>Flights</div>
-      <div>Offer Zone</div>
+      {brandOptions.map((brand) => (
+        <div className="cursor-pointer" onClick={() => setBrands([brand])}>
+          {brand}{" "}
+        </div>
+      ))}
     </div>
   );
 };

@@ -18,14 +18,20 @@ const ProductItem = (props) => {
         <p className="text-sm text-gray-500">{item.brand}</p>
         <div className="mt-2">
           <span className="text-lg font-bold text-gray-800">
-            ₹{Math.round((item.price * (100 - item.discount)) / 100)}
+            ₹{item.discountPrice}
           </span>
-          <span className="text-sm text-gray-500 line-through ml-2">
-            ₹{item.price}
-          </span>
-          <span className="text-sm text-green-600 ml-2">
-            {item.discount}% off
-          </span>
+          {item.discount !== 0 ? (
+            <>
+              <span className="text-sm text-gray-500 line-through ml-2">
+                ₹{item.price}
+              </span>
+              <span className="text-sm text-green-600 ml-2">
+                {item.discount}% off
+              </span>{" "}
+            </>
+          ) : (
+            <></>
+          )}
         </div>
       </div>
     </div>
