@@ -9,8 +9,11 @@ import AlertTemplate from "react-alert-template-basic";
 
 const options = {
   timeout: 4000,
-  position: positions.BOTTOM_CENTER,
+  position: positions.TOP_CENTER,
   transition: transitions.SCALE,
+  containerStyle: {
+    zIndex: 9999,
+  },
 };
 
 const root = ReactDOM.createRoot(document.getElementById("root"));

@@ -1,24 +1,234 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaSearch } from "react-icons/fa";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { getProducts } from "../../actions/productAction";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { Box, Modal, TextField } from "@mui/material";
+import {
+  clearErrors,
+  loginUser,
+  logout,
+  register,
+} from "../../actions/userAction";
+import { useAlert } from "react-alert";
+import { BsCartFill } from "react-icons/bs";
 
 const Header = () => {
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const alert = useAlert();
+
+  const { error, isAuthenticated } = useSelector((state) => state.user);
+  const { cartItems } = useSelector((state) => state.cart);
 
   const [str, setstr] = useState();
+  const [login, setLogin] = useState(true);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [phone_no, setNumber] = useState("");
+
+  useEffect(() => {
+    if (error) {
+      alert.error(error);
+      dispatch(clearErrors());
+    }
+    if (isAuthenticated) {
+      alert.success("Logged in successfully");
+      setOpen(false);
+    }
+  }, [dispatch, alert, error, isAuthenticated]);
 
   const submitHandler = (e) => {
     e.preventDefault();
     dispatch(getProducts({ keyword: str }));
   };
 
+  const loginHandler = (e) => {
+    e.preventDefault();
+    dispatch(loginUser(email, password));
+  };
+
+  const registerHandler = (e) => {
+    e.preventDefault();
+    dispatch(register(name, email, password, phone_no));
+  };
+
+  const logoutHandler = (e) => {
+    e.preventDefault();
+    alert.success("Logged in successfully");
+    dispatch(logout());
+  };
+
+  const cartHandler = () => {
+    if (!isAuthenticated) setOpen(true);
+    else navigate("/cart");
+  };
+
+  const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    bgcolor: "background.paper",
+    boxShadow: 24,
+  };
+
   const subURL =
     "https://static-assets-web.flixcart.com/www/linchpin/fk-cp-zion/img/plus_aef861.png";
   return (
-    <div className="flex justify-around bg-blue-600 h-14">
+    <div className="sticky top-0 z-50 flex justify-around bg-blue-600 h-14">
+      {!isAuthenticated ? (
+        <Modal
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          {login ? (
+            <Box
+              className="w-5/12 h-[75%] flex min-w-[600px] min-h-[400px]"
+              sx={style}
+            >
+              <div className="grid grid-cols-5 grid-flow-row h-full">
+                <div
+                  style={{
+                    backgroundImage:
+                      "url('https://static-assets-web.flixcart.com/fk-p-linchpin-web/fk-cp-zion/img/login_img_c4a81e.png')",
+                    backgroundPosition: "center 85%",
+                  }}
+                  className="flex flex-col bg-no-repeat bg-[#2874f0] p-8 text-white col-span-2"
+                >
+                  <h2 className="font-medium text-[28px] mb-5">Login</h2>
+                  <p className="text-lg text-[#dbdbdb]">
+                    Get access to your Orders, Wishlist and Recommendations
+                  </p>
+                </div>
+                <div className="flex flex-col col-span-3 p-8">
+                  <TextField
+                    className="w-full"
+                    id="standard-basic"
+                    label="Enter Email"
+                    variant="standard"
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
+                  <TextField
+                    className="w-full"
+                    id="standard-basic"
+                    label="Enter Password"
+                    variant="standard"
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
+                  <p className="text-xs text-gray-600 mt-10">
+                    By continuing, you agree to Flipkart's{" "}
+                    <span className="text-blue-600">Terms of Use</span> and{" "}
+                    <span className="text-blue-600">Privacy Policy</span>.
+                  </p>
+                  <button
+                    className="bg-[#fb641b] w-full p-3 rounded-sm mt-5 text-white font-medium text-base"
+                    onClick={loginHandler}
+                  >
+                    Login
+                  </button>
+                  <button
+                    className="mt-auto text-blue-600 text-sm font-medium"
+                    onClick={() => setLogin(false)}
+                  >
+                    New to Flipkart? Create an account
+                  </button>
+                </div>
+              </div>
+              <button
+                onClick={handleClose}
+                className="absolute -right-5 -top-2 text-2xl text-white"
+              >
+                X
+              </button>
+            </Box>
+          ) : (
+            <>
+              <Box
+                className="w-5/12 h-[75%] flex min-w-[600px] min-h-[400px]"
+                sx={style}
+              >
+                <div className="grid grid-cols-5 grid-flow-row h-full">
+                  <div
+                    style={{
+                      backgroundImage:
+                        "url('https://static-assets-web.flixcart.com/fk-p-linchpin-web/fk-cp-zion/img/login_img_c4a81e.png')",
+                      backgroundPosition: "center 85%",
+                    }}
+                    className="flex flex-col bg-no-repeat bg-[#2874f0] p-8 text-white col-span-2"
+                  >
+                    <h2 className="font-medium text-[28px] mb-5">Register</h2>
+                    <p className="text-lg text-[#dbdbdb]">
+                      Get access to your Orders, Wishlist and Recommendations
+                    </p>
+                  </div>
+                  <div className="flex flex-col col-span-3 p-8">
+                    <TextField
+                      className="w-full"
+                      id="standard-basic"
+                      label="Enter Full Name"
+                      variant="standard"
+                      onChange={(e) => setName(e.target.value)}
+                    />
+                    <TextField
+                      className="w-full"
+                      id="standard-basic"
+                      label="Enter Email"
+                      variant="standard"
+                      onChange={(e) => setEmail(e.target.value)}
+                    />
+                    <TextField
+                      className="w-full"
+                      id="standard-basic"
+                      label="Enter Password"
+                      variant="standard"
+                      onChange={(e) => setPassword(e.target.value)}
+                    />
+                    <TextField
+                      className="w-full"
+                      id="standard-basic"
+                      label="Enter Phone Number"
+                      variant="standard"
+                      onChange={(e) => setNumber(e.target.value)}
+                    />
+                    <p className="text-xs text-gray-600 mt-10">
+                      By continuing, you agree to Flipkart's{" "}
+                      <span className="text-blue-600">Terms of Use</span> and{" "}
+                      <span className="text-blue-600">Privacy Policy</span>.
+                    </p>
+                    <button
+                      className="bg-[#fb641b] w-full p-3 rounded-sm mt-5 text-white font-medium text-base"
+                      onClick={registerHandler}
+                    >
+                      Register
+                    </button>
+                    <button
+                      className="mt-auto text-blue-600 text-sm font-medium"
+                      onClick={() => setLogin(true)}
+                    >
+                      Already have an account? SignIn
+                    </button>
+                  </div>
+                </div>
+                <button
+                  onClick={handleClose}
+                  className="absolute -right-5 -top-2 text-2xl text-white"
+                >
+                  X
+                </button>
+              </Box>
+            </>
+          )}
+        </Modal>
+      ) : (
+        <></>
+      )}
       <div
         className="flex-col ml-24 cursor-pointer"
         onClick={() => navigate("/")}
@@ -53,16 +263,39 @@ const Header = () => {
         </button>
       </div>
       <div>
-        <button className="w-28 h-7 bg-gray-50 mt-3.5 rounded border-none text-blue-800 font-sans font-semibold">
-          Login
-        </button>
+        {isAuthenticated ? (
+          <button
+            onClick={logoutHandler}
+            className="w-28 h-7 bg-gray-50 mt-3.5 rounded border-none text-blue-800 font-sans font-semibold"
+          >
+            Logout
+          </button>
+        ) : (
+          <button
+            onClick={handleOpen}
+            className="w-28 h-7 bg-gray-50 mt-3.5 rounded border-none text-blue-800 font-sans font-semibold"
+          >
+            Login
+          </button>
+        )}
       </div>
       <div className="text-gray-50 font-bold font-sans mt-3.5">
         Become a Seller
       </div>
-      <Link to="/cart" className="text-gray-50 font-bold font-sans mt-3.5">
-        Cart
-      </Link>
+      <div
+        className="relative text-gray-50 font-bold font-sans mt-3.5 flex items-center gap-2 cursor-pointer"
+        onClick={cartHandler}
+      >
+        <div className="relative">
+          <BsCartFill className="text-2xl mb-1" />
+          {cartItems.length !== 0 ? (
+            <span className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 bg-orange-500 text-white text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full">
+              {cartItems.length}
+            </span>
+          ) : null}
+        </div>
+        <div className="text-gray-50 font-bold font-sans">Cart</div>
+      </div>
     </div>
   );
 };
