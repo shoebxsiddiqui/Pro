@@ -11,6 +11,8 @@ import {
 } from "../constants/userConstants";
 import axios from "axios";
 
+import { DB_URL } from "../constants/backend";
+
 //Login User
 export const loginUser = (email, password) => async (dispatch) => {
   try {
@@ -19,7 +21,7 @@ export const loginUser = (email, password) => async (dispatch) => {
     const config = { headers: { "Content-Type": "application/json" } };
 
     const { data } = await axios.post(
-      `/api/v1/login`,
+      `${DB_URL}/api/v1/login`,
       { email, password },
       config
     );
@@ -39,7 +41,7 @@ export const register =
       const config = { headers: { "Content-Type": "application/json" } };
 
       const { data } = await axios.post(
-        `/api/v1/register`,
+        `${DB_URL}/api/v1/register`,
         { name, email, password, phone_no },
         config
       );
@@ -56,7 +58,7 @@ export const register =
 //Logout User
 export const logout = () => async (dispatch) => {
   try {
-    await axios.get(`/api/v1/logout`);
+    await axios.get(`${DB_URL}/api/v1/logout`);
 
     dispatch({ type: LOGOUT_SUCCESS });
   } catch (error) {

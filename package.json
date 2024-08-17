@@ -23,7 +23,6 @@
     "redux": "^5.0.1",
     "redux-devtools-extension": "^2.13.9",
     "redux-thunk": "^3.1.0",
-    "sass": "^1.77.8",
     "web-vitals": "^2.1.4",
     "webfontloader": "^1.6.28"
   },
@@ -53,6 +52,5 @@
   },
   "devDependencies": {
     "tailwindcss": "^3.4.9"
-  },
-  "proxy": "https://profile-backend-bwxw.onrender.com"
+  }
 }
