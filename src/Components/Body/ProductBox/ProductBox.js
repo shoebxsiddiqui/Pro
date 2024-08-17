@@ -17,6 +17,7 @@ const ProductBox = () => {
 
   const { loading, error, products, filteredProductsCount, resultPerPage } =
     useSelector((state) => state.products);
+
   useEffect(() => {
     if (error) {
       return alert.error(error);
