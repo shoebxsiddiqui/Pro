@@ -23,6 +23,7 @@ export const loginUser = (email, password) => async (dispatch) => {
     const { data } = await axios.post(
       `${DB_URL}/api/v1/login`,
       { email, password },
+      { withCredentials: true },
       config
     );
 
@@ -37,12 +38,12 @@ export const register =
   (name, email, password, phone_no) => async (dispatch) => {
     try {
       dispatch({ type: REGISTER_USER_REQUEST });
-      console.log(phone_no);
       const config = { headers: { "Content-Type": "application/json" } };
 
       const { data } = await axios.post(
         `${DB_URL}/api/v1/register`,
         { name, email, password, phone_no },
+        { withCredentials: true },
         config
       );
 
@@ -58,7 +59,7 @@ export const register =
 //Logout User
 export const logout = () => async (dispatch) => {
   try {
-    await axios.get(`${DB_URL}/api/v1/logout`);
+    await axios.get(`${DB_URL}/api/v1/logout`, { withCredentials: true });
 
     dispatch({ type: LOGOUT_SUCCESS });
   } catch (error) {

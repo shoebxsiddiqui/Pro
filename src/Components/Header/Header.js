@@ -30,13 +30,24 @@ const Header = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [phone_no, setNumber] = useState("");
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
     if (error) {
       toast.error(error);
       dispatch(clearErrors());
     }
+    const checkCookie = () => {
+      return document.cookie.length > 2;
+    };
+
+    if (checkCookie()) {
+      setIsLoggedIn(true);
+    } else {
+      setIsLoggedIn(false);
+    }
     if (isAuthenticated) {
+      setIsLoggedIn(true);
       toast.success("Logged in successfully");
       setOpen(false);
     }
@@ -57,12 +68,17 @@ const Header = () => {
     dispatch(register(name, email, password, phone_no));
   };
 
-  const logoutHandler = (e) => {
+  const logoutHandler = async (e) => {
     e.preventDefault();
-    toast.success("Logged in successfully");
-    setEmail("");
-    setPassword("");
-    dispatch(logout());
+    try {
+      await dispatch(logout());
+      setEmail("");
+      setPassword("");
+      setIsLoggedIn(false);
+      toast.success("Logout successfully");
+    } catch (error) {
+      toast.error("Try again");
+    }
   };
 
   const cartHandler = () => {
@@ -86,8 +102,10 @@ const Header = () => {
     <div className="sticky top-0 z-50 flex justify-around bg-blue-600 h-14">
       <ToastContainer
         position="top-center"
-        autoClose={2000}
-        style={{ zIndex: 99999999 }}
+        autoClose={1000}
+        hideProgressBar
+        theme="light"
+        stacked
       />
       {!isAuthenticated ? (
         <Modal
@@ -117,17 +135,21 @@ const Header = () => {
                 </div>
                 <div className="flex flex-col col-span-3 p-8">
                   <TextField
+                    type="email"
                     className="w-full"
                     id="standard-basic"
                     label="Enter Email"
                     variant="standard"
+                    value={email}
                     onChange={(e) => setEmail(e.target.value)}
                   />
                   <TextField
+                    type="password"
                     className="w-full"
                     id="standard-basic"
                     label="Enter Password"
                     variant="standard"
+                    value={password}
                     onChange={(e) => setPassword(e.target.value)}
                   />
                   <p className="text-xs text-gray-600 mt-10">
@@ -178,6 +200,8 @@ const Header = () => {
                   </div>
                   <div className="flex flex-col col-span-3 p-8">
                     <TextField
+                      type="name"
+                      value={name}
                       className="w-full"
                       id="standard-basic"
                       label="Enter Full Name"
@@ -185,6 +209,8 @@ const Header = () => {
                       onChange={(e) => setName(e.target.value)}
                     />
                     <TextField
+                      type="email"
+                      value={email}
                       className="w-full"
                       id="standard-basic"
                       label="Enter Email"
@@ -192,6 +218,8 @@ const Header = () => {
                       onChange={(e) => setEmail(e.target.value)}
                     />
                     <TextField
+                      type="password"
+                      value={password}
                       className="w-full"
                       id="standard-basic"
                       label="Enter Password"
@@ -199,6 +227,8 @@ const Header = () => {
                       onChange={(e) => setPassword(e.target.value)}
                     />
                     <TextField
+                      type="Number"
+                      value={phone_no}
                       className="w-full"
                       id="standard-basic"
                       label="Enter Phone Number"
@@ -271,7 +301,7 @@ const Header = () => {
         </button>
       </div>
       <div>
-        {isAuthenticated ? (
+        {isLoggedIn ? (
           <button
             onClick={logoutHandler}
             className="w-28 h-7 bg-gray-50 mt-3.5 rounded border-none text-blue-800 font-sans font-semibold"
