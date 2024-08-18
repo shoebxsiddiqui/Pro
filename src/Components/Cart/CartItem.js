@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { addItemsToCart, removeItemsFromCart } from "../../actions/cartAction";
-import { useAlert } from "react-alert";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const CartItem = ({ item }) => {
   const dispatch = useDispatch();
-  const alert = useAlert();
 
   const [quantity, setQuantity] = useState(item.quantity);
 
@@ -15,7 +15,7 @@ const CartItem = ({ item }) => {
 
   const removeHandler = (e) => {
     e.preventDefault();
-    alert.success("Item removed successfully");
+    toast.success("Item removed successfully");
     dispatch(removeItemsFromCart(item.product));
   };
 

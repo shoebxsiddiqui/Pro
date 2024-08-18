@@ -10,8 +10,9 @@ import {
   logout,
   register,
 } from "../../actions/userAction";
-import { useAlert } from "react-alert";
 import { BsCartFill } from "react-icons/bs";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Header = () => {
   const [open, setOpen] = React.useState(false);
@@ -19,7 +20,6 @@ const Header = () => {
   const handleClose = () => setOpen(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const alert = useAlert();
 
   const { error, isAuthenticated } = useSelector((state) => state.user);
   const { cartItems } = useSelector((state) => state.cart);
@@ -33,14 +33,14 @@ const Header = () => {
 
   useEffect(() => {
     if (error) {
-      alert.error(error);
+      toast.error(error);
       dispatch(clearErrors());
     }
     if (isAuthenticated) {
-      alert.success("Logged in successfully");
+      toast.success("Logged in successfully");
       setOpen(false);
     }
-  }, [dispatch, alert, error, isAuthenticated]);
+  }, [dispatch, error, isAuthenticated]);
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -59,7 +59,9 @@ const Header = () => {
 
   const logoutHandler = (e) => {
     e.preventDefault();
-    alert.success("Logged in successfully");
+    toast.success("Logged in successfully");
+    setEmail("");
+    setPassword("");
     dispatch(logout());
   };
 
@@ -75,12 +77,18 @@ const Header = () => {
     transform: "translate(-50%, -50%)",
     bgcolor: "background.paper",
     boxShadow: 24,
+    zIndex: 1,
   };
 
   const subURL =
     "https://static-assets-web.flixcart.com/www/linchpin/fk-cp-zion/img/plus_aef861.png";
   return (
     <div className="sticky top-0 z-50 flex justify-around bg-blue-600 h-14">
+      <ToastContainer
+        position="top-center"
+        autoClose={2000}
+        style={{ zIndex: 99999999 }}
+      />
       {!isAuthenticated ? (
         <Modal
           open={open}

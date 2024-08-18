@@ -2,16 +2,16 @@ import React, { useEffect, useState } from "react";
 import ProductItem from "./ProductItem.js";
 import { getProducts } from "../../../actions/productAction.js";
 import { useSelector, useDispatch } from "react-redux";
-import { useAlert } from "react-alert";
 import { useParams } from "react-router-dom";
 import { Pagination } from "@mui/material";
 import Loader from "../../Loader/Loader.js";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const ProductBox = () => {
   const { keyword } = useParams();
 
   const dispatch = useDispatch();
-  const alert = useAlert();
 
   const [page, setPage] = useState(1);
 
@@ -20,16 +20,15 @@ const ProductBox = () => {
 
   useEffect(() => {
     if (error) {
-      return alert.error(error);
+      return toast.error(error);
     }
     dispatch(getProducts({ keyword, page }));
-  }, [dispatch, error, alert, keyword, page]);
+  }, [dispatch, error, keyword, page]);
 
   const handlePage = (event, value) => {
     setPage(value);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
-
   return (
     <>
       {" "}

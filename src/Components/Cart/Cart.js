@@ -2,17 +2,17 @@ import React from "react";
 import CartItem from "./CartItem.js";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { useAlert } from "react-alert";
 import { removeItemsFromCart } from "../../actions/cartAction.js";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Cart = () => {
   const { cartItems } = useSelector((state) => state.cart);
   const navigate = useNavigate();
-  const alert = useAlert();
   const dispatch = useDispatch();
 
   const orderHandler = (e) => {
-    alert.success("Order placed successfully");
+    toast.success("Order placed successfully");
     cartItems.map((item) => dispatch(removeItemsFromCart(item.product)));
     navigate("/");
   };

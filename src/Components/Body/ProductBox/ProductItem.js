@@ -4,25 +4,24 @@ import { BsCartFill } from "react-icons/bs";
 import { useDispatch } from "react-redux";
 import { addItemsToCart } from "../../../actions/cartAction";
 import { FaParachuteBox } from "react-icons/fa";
-import { useAlert } from "react-alert";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const ProductItem = (props) => {
   const item = props.item;
-  const alert = useAlert();
 
   const dispatch = useDispatch();
   const [animation, setAnimation] = useState(false);
 
   const cartHandler = (e) => {
     e.preventDefault();
-    alert.success("Item Added to Cart");
+    toast.success("Item Added to Cart");
     dispatch(addItemsToCart(item._id, 1));
     setAnimation(true);
     setTimeout(() => {
       setAnimation(false);
     }, 1000);
   };
-
   return (
     <div className="bg-white rounded-lg shadow-lg overflow-hidden max-w-xs w-full mx-auto transform transition hover:scale-105 duration-300">
       <div className="h-48 w-full overflow-hidden flex items-center justify-center">
