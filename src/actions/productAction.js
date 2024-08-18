@@ -23,7 +23,7 @@ export const getProducts = (obj) => async (dispatch) => {
     let brands = [];
     if (obj.brands) brands = obj.brands.join(",");
 
-    const link = `http://localhost:4000/api/v1/products?keyword=${keyword}&page=${page}&price[gte]=${price[0]}&price[lte]=${price[1]}&brands=${brands}&ratings[gte]=${ratings}&discount[gte]=${discount}&Stock[gte]=${Stock}`;
+    const link = `${DB_URL}/api/v1/products?keyword=${keyword}&page=${page}&price[gte]=${price[0]}&price[lte]=${price[1]}&brands=${brands}&ratings[gte]=${ratings}&discount[gte]=${discount}&Stock[gte]=${Stock}`;
     const { data } = await axios.get(link);
     dispatch({
       type: ALL_PRODUCT_SUCCESS,
