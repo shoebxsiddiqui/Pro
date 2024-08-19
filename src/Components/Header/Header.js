@@ -30,24 +30,13 @@ const Header = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [phone_no, setNumber] = useState("");
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
     if (error) {
       toast.error(error);
       dispatch(clearErrors());
     }
-    const checkCookie = () => {
-      return document.cookie.length > 2;
-    };
-
-    if (checkCookie()) {
-      setIsLoggedIn(true);
-    } else {
-      setIsLoggedIn(false);
-    }
     if (isAuthenticated) {
-      setIsLoggedIn(true);
       toast.success("Logged in successfully");
       setOpen(false);
     }
@@ -70,15 +59,10 @@ const Header = () => {
 
   const logoutHandler = async (e) => {
     e.preventDefault();
-    try {
-      await dispatch(logout());
-      setEmail("");
-      setPassword("");
-      setIsLoggedIn(false);
-      toast.success("Logout successfully");
-    } catch (error) {
-      toast.error("Try again");
-    }
+    dispatch(logout());
+    setEmail("");
+    setPassword("");
+    toast.success("Logout successfully");
   };
 
   const cartHandler = () => {
@@ -301,7 +285,7 @@ const Header = () => {
         </button>
       </div>
       <div>
-        {isLoggedIn ? (
+        {isAuthenticated ? (
           <button
             onClick={logoutHandler}
             className="w-28 h-7 bg-gray-50 mt-3.5 rounded border-none text-blue-800 font-sans font-semibold"

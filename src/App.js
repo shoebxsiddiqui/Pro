@@ -6,6 +6,8 @@ import Categories from "./Components/Header/Categories.js";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Cart from "./Components/Cart/Cart.js";
 import Footer from "./Components/Footer/Footer.js";
+import { loadUser } from "./actions/userAction.js";
+import store from "./store.js";
 
 function App() {
   useEffect(() => {
@@ -14,6 +16,7 @@ function App() {
         families: ["Roboto", "Droid Sans", "Chilanka"],
       },
     });
+    store.dispatch(loadUser());
   }, []);
 
   return (
